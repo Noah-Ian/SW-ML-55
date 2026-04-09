@@ -31,13 +31,13 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Header
-st.title("🌾 Agritech Gradient Boosting Predictor")
+st.title(" Agritech Moisture predictor")
 st.markdown("""
 This tool helps farmers and agronomists make **data-driven decisions**.  
-Please provide the following information:
+Please provide the following sensor data:
 - **Sensor_ID**: Numeric ID of the sensor (e.g., 101).  
 - **Date**: Enter the date in YYYY-MM-DD format.  
-- **Type**: Crop or sensor type (e.g., Maize, Soil).  
+- **Type**: Crop or sensor type (e.g., Maize, Beans).  
 - **Fertilizer_Recommended (kg/ha)**: Numeric fertilizer recommendation.  
 - **Humidity (%)**: Current humidity level.  
 - **Temperature (°C)**: Current temperature.  
@@ -45,19 +45,18 @@ Please provide the following information:
 """)
 
 # Input form
-sensor_id = st.number_input("Sensor_ID", min_value=0, step=1)
 date = st.text_input("Date (YYYY-MM-DD)", value="2026-04-09")
-type_value = st.text_input("Type (e.g., Maize, Soil)")
+type_value = st.text_input("Type (e.g., Maize, Beans)")
 fertilizer = st.number_input("Fertilizer_Recommended (kg/ha)", min_value=0.0, format="%.2f")
 humidity = st.number_input("Humidity (%)", min_value=0.0, max_value=100.0, format="%.2f")
 temperature = st.number_input("Temperature (°C)", min_value=-10.0, max_value=60.0, format="%.2f")
 soil_ph = st.number_input("Soil pH", min_value=0.0, max_value=14.0, format="%.2f")
 
 # Feature list (numerical only for ONNX model)
-features_list = [sensor_id, fertilizer, humidity, temperature, soil_ph]
+features_list = [ fertilizer, humidity, temperature, soil_ph]
 
 # Prediction button
-if st.button("🚀 Predict Recommendation"):
+if st.button(" Predict Recommendation"):
     try:
         response = requests.post("http://localhost:8000/predict", json={"features": features_list})
         st.success(f"Predicted Output: {response.json()['prediction']:.4f}")

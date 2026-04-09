@@ -5,7 +5,6 @@ from pydantic import BaseModel
 
 app = FastAPI(title="Gradient Boosting API")
 
-# Load ONNX model
 session = ort.InferenceSession("model/model.onnx")
 
 class InputData(BaseModel):
