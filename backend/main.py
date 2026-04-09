@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 app = FastAPI(title="Gradient Boosting API")
 
-session = ort.InferenceSession("model/model.onnx")
+session = ort.InferenceSession("./model/model.onnx")
 
 class InputData(BaseModel):
     features: list

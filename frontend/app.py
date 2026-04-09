@@ -34,14 +34,7 @@ st.markdown("""
 st.title(" Agritech Moisture predictor")
 st.markdown("""
 This tool helps farmers and agronomists make **data-driven decisions**.  
-Please provide the following sensor data:
-- **Sensor_ID**: Numeric ID of the sensor (e.g., 101).  
-- **Date**: Enter the date in YYYY-MM-DD format.  
-- **Type**: Crop or sensor type (e.g., Maize, Beans).  
-- **Fertilizer_Recommended (kg/ha)**: Numeric fertilizer recommendation.  
-- **Humidity (%)**: Current humidity level.  
-- **Temperature (°C)**: Current temperature.  
-- **Soil pH**: Numeric soil pH value.  
+Please provide the following sensor data: 
 """)
 
 # Input form
