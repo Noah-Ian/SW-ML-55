@@ -1,0 +1,8 @@
+.git
+**/__pycache__
+**/*.pyc
+.venv
+venv
+*.ipynb_checkpoints
+agro_moisture_dataset.csv
+cleaned_agro_moisture_dataset.csv

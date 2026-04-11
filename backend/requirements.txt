@@ -1,5 +1,7 @@
-fastapi
-uvicorn
-onnxruntime
-numpy
-pydantic
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+onnxruntime>=1.16.0
+numpy>=1.24.0
+joblib>=1.3.0
+pydantic>=2.0.0
+prometheus-fastapi-instrumentator>=6.1.0

@@ -1,0 +1,45 @@
+# MLOps: validate notebook-produced artifacts exist, build images, smoke-test API
+name: MLOps
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build-and-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check model artifacts (from agro_moisture.ipynb)
+        run: |
+          test -f backend/model/model.onnx || (echo "Run all cells in agro_moisture.ipynb to create backend/model/model.onnx" && exit 1)
+          test -f backend/model/scaler.joblib || (echo "Run all cells in agro_moisture.ipynb to create backend/model/scaler.joblib" && exit 1)
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: false
+          tags: agro-moisture-backend:test
+          load: true
+
+      - name: Build frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: false
+          tags: agro-moisture-frontend:test
+          load: true
+
+      - name: Smoke test API
+        run: |
+          docker run -d --name api -p 8000:8000 agro-moisture-backend:test
+          sleep 8
+          curl -fsS http://127.0.0.1:8000/health | grep -q '"ready":true'
+          docker stop api

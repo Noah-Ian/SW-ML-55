@@ -1,18 +1,19 @@
-# Use a lightweight Python base image
-FROM python:3.10-slim
+FROM python:3.11-slim
 
-# Set working directory inside the container
 WORKDIR /app
 
-# Copy dependency list and install them
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    BACKEND_URL=http://backend:8000
+
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all backend files (including model folder)
-COPY . .
+COPY app.py .
 
-# Expose FastAPI port
-EXPOSE 8000
+EXPOSE 8501
 
-# Run the FastAPI app using Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8501/_stcore/health')" || exit 1
+
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0", "--browser.gatherUsageStats=false"]

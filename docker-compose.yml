@@ -1,12 +1,19 @@
-
 services:
   backend:
     build: ./backend
     ports:
       - "8000:8000"
+    environment:
+      MODEL_VERSION: "1.0.0"
+      CORS_ORIGINS: "http://localhost:8501,http://127.0.0.1:8501"
+    restart: unless-stopped
+
   frontend:
     build: ./frontend
     ports:
       - "8501:8501"
+    environment:
+      BACKEND_URL: "http://backend:8000"
     depends_on:
       - backend
+    restart: unless-stopped
